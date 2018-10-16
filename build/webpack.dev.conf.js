@@ -9,9 +9,41 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
-
+let express = require('express')
+let app = express()
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
+
+const appData = require('../data.json')
+
+let seller = appData.seller
+let goods = appData.goods
+let ratings = appData.ratings
+
+const apiRoutes = express.Router()
+
+apiRoutes.get('/seller', function (req, res) {
+  res.json({
+    errno: 0,
+    data: seller
+  })
+})
+
+apiRoutes.get('/goods', function (req, res) {
+  res.json({
+    errno: 0,
+    data: goods
+  })
+})
+
+apiRoutes.get('/ratings', function (req, res) {
+  res.json({
+    errno: 0,
+    data: ratings
+  })
+})
+
+app.use('/api', apiRoutes)
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   module: {
