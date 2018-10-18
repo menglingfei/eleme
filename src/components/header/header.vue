@@ -27,22 +27,28 @@
     <div class="background">
       <img :src="seller.avatar" />
     </div>
-    <div v-show="detailShow" class="detail-pop">
+    <div v-show="detailShow" class="detail-pop" transition="fade">
       <div class="detail-wrap clearfix">
         <div class="detail-title">{{seller.name}}</div>
         <div class="star-wrap">
           <star :score="seller.score" :size="48"></star>
         </div>
-        <div class="divider"></div>
-        <div class="coupon-wrap">
-          <!--
-          <div v-for="item in items" class="coupon-items">
-            <span class="coupon-item-img"></span>
-            <span class="coupon-item-content"><span>
-          </div>
-          -->
+        <div class="divider-wrap">
+          <div class="divider-line"></div>
+          <div class="divider-content">优惠信息</div>
+          <div class="divider-line"></div>
         </div>
-        <div class="divider"></div>
+        <ul class="coupon-wrap">
+          <li :key="couponItem.id" v-for="couponItem in couponItems" class="coupon-items">
+            <span class="coupon-icon" :class="classMap[couponItem.type]"></span>
+            <span class="coupon-item-content">{{couponItem.description}}</span>
+          </li>
+        </ul>
+        <div class="divider-wrap">
+          <div class="divider-line"></div>
+          <div class="divider-content">商家公告</div>
+          <div class="divider-line"></div>
+        </div>
         <div class="detail-content">{{seller.bulletin}}</div>
       </div>
       <div class="detail-close" @click="hideDetail">关闭</div>
@@ -62,6 +68,11 @@
       props: {
         seller: {
           type: Object
+        }
+      },
+      computed: {
+        couponItems () {
+          return this.seller.supports
         }
       },
       components: {
@@ -205,6 +216,14 @@
       text-align: center
       z-index: 100
       overflow: auto
+      transition: all 0.5s
+      backdrop-filter: blur(10px)
+      &.fade-transition
+        opacity: 1
+        background: rgba(7, 17, 27, 0.8)
+      &.fade-enter, &.fade-leave
+        opacity: 0
+        background: rgba(7, 17, 27, 0)
       .detail-wrap
         width: 100%
         min-height: 100%
@@ -216,13 +235,51 @@
         .star-wrap
           margin-top: 16px
           line-height: 24px
-        .divider
-          border: 1px solid rgba(255, 255, 255, 0.2)
+        .divider-wrap
+          display: flex
           margin: 28px 36px 24px 36px
+          .divider-line
+            flex: 1
+            position: relative
+            top: -8px
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2)
+          .divider-content
+            margin: 0 24px
+            font-weight: 600
+        .coupon-wrap
+          padding: 0 36px
+          .coupon-items
+            list-style: none
+            text-align: left
+            margin: 0 12px 12px 12px
+            font-size: 12px
+            line-height: 12px
+            .coupon-icon
+              display: inline-block
+              width: 16px
+              height: 16px
+              background-repeat: no-repeat
+              background-size: 100% 100%
+              vertical-align: top
+              &.decrease
+                bg-image('decrease_1')
+              &.guarantee
+                bg-image('guarantee_1')
+              &.discount
+                bg-image('discount_1')
+              &.invoice
+                bg-image('invoice_1')
+              &.special
+                bg-image('special_1')
+            .coupon-item-content
+              display: inline-block
+              margin-left: 6px
+              vertical-align: top
         .detail-content
           padding: 24px 48px 0 48px
           font-size: 12px
           line-height: 24px
+          text-align: left
   .detail-close
     height: 64px
     margin-top: -64px
