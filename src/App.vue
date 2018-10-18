@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <v-header></v-header>
+    <v-header :seller="seller"></v-header>
     <div class="tab">
       <router-link class="tab-item" to="/goods">商品</router-link>
       <router-link class="tab-item" to="/ratings">评价</router-link>
@@ -84,6 +84,7 @@ export default {
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>
+  @import './common/stylus/base.styl'
   @import './common/stylus/mixin.styl'
   #app
     .tab
