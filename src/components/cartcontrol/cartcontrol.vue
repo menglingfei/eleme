@@ -1,6 +1,8 @@
 <template>
   <div class="cartcontrol">
-    <span class="minus" v-show="food.count>0" @click="decreaseNum">-</span>
+    <span class="minus" v-show="food.count>0" @click="decreaseNum" transition="move">
+      <span class="inner">-</span>
+    </span>
     <span class="count" v-show="food.count>0">{{food.count}}</span>
     <span class="plus" @click="addNum">+</span>
   </div>
@@ -48,6 +50,22 @@
       font-weight: 700
       vertical-align: top
       text-align: center
+      transition: all 0.4s linear
+      &.move-transition
+        opacity: 1
+        transform: translate3D(0, 0, 0)
+      .inner
+        display: inline-block;
+        width: 100%;
+        height: 24px;
+        line-height: 24px;
+        transition: all 0.4s linear
+        transform: rotate(0)
+        &.move-enter, &.move-leave
+          opacity: 0
+          transform: translate3D(24px, 0, 0)
+          .inner
+            transform: rotate(180deg)
     .count
       display: inline-block
       width: 12px

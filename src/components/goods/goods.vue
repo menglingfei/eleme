@@ -15,33 +15,33 @@
         <li class="food-list j-food-list" :key="item.id" v-for="item in goods">
           <div class="title">{{item.name}}</div>
           <ul>
-            <li class="food-list-item" :key="listItem.id" v-for="listItem in item.foods">
+            <li class="food-list-item" :key="food.id" v-for="food in item.foods">
               <!--左侧图片-->
               <div class="avatar">
-                <img width="57" height="57" :src="listItem.icon"/>
+                <img width="57" height="57" :src="food.icon"/>
               </div>
               <!--右侧-->
               <div class="content">
-                <h2 class="name">{{listItem.name}}</h2>
-                <p v-show="listItem.description" class="descpt">{{listItem.description}}</p>
+                <h2 class="name">{{food.name}}</h2>
+                <p v-show="food.description" class="descpt">{{food.description}}</p>
                 <div class="extra">
-                  <span>月售{{listItem.sellCount}}份</span>
-                  <span>好评率{{listItem.rating}}%</span>
+                  <span>月售{{food.sellCount}}份</span>
+                  <span>好评率{{food.rating}}%</span>
                 </div>
                 <div class="price">
-                  <span class="now">￥{{listItem.price}}</span>
-                  <span class="old" v-show="listItem.oldPrice">{{listItem.oldPrice}}</span>
+                  <span class="now">￥{{food.price}}</span>
+                  <span class="old" v-show="food.oldPrice">{{food.oldPrice}}</span>
                 </div>
               </div>
               <div class="cart-count-wrap">
-                <cartcontrol :food="item"></cartcontrol>
+                <cartcontrol :food="food"></cartcontrol>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
-    <shopcart :selectFoods="[{count: 2,price: 5}]" :deliver-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+    <shopcart :selectFoods="selectFoods" :deliver-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -1156,10 +1156,22 @@
           let height1 = this.listHeight[i]
           let height2 = this.listHeight[i + 1]
           if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
-            console.log(i)
             return i
           }
         }
+        return 0
+      },
+      selectFoods () {
+        let foods = []
+        console.log(this.goods)
+        this.goods.forEach((good) => {
+          good.foods.forEach((food) => {
+            if (food.count) {
+              foods.push(food)
+            }
+          })
+        })
+        return foods
       }
     },
     methods: {
